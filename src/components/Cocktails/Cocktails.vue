@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted, h } from "vue";
+import { ref, onMounted, h, watch } from "vue";
 import { Cocktail } from "@/components/Cocktails/cocktails.types";
 import { getIngredientsWithMeasures } from "@/components/Cocktails/cocktails.utils";
 import { fetchCocktails } from "@/components/Cocktails/cocktails.api";
@@ -20,21 +20,22 @@ import {
 } from "ant-design-vue";
 
 const cocktails = ref<Cocktail[]>([]);
-const loading = ref(false);
+const isLoading = ref(false);
+const isSelectedIngredients = ref(false);
 
-const selectedIngredients = ref(false);
+watch(
+  () => isSelectedIngredients,
+  (val) => {
+    console.log("Prop changed:", val);
+  },
+);
 
-const onHandleIngredients = (value: boolean) => {
-  selectedIngredients.value = value;
+const onHandleIngredients = (isSelected: boolean) => {
+  isSelectedIngredients.value = isSelected;
 };
 
 const onHandleSearch = async (searchValue: string) => {
   const searchTerm = searchValue.trim().toLowerCase();
-
-  if (!searchTerm) {
-    fetchRandomCocktails();
-    return;
-  }
 
   const filtered = cocktails.value.filter((cocktail) =>
     cocktail.strDrink.toLowerCase().includes(searchTerm),
@@ -44,8 +45,8 @@ const onHandleSearch = async (searchValue: string) => {
 
 const fetchRandomCocktails = async () => {
   try {
-    loading.value = true;
-    const fetchRandomCocktails = Array.from({ length: 3 }, () =>
+    isLoading.value = true;
+    const fetchRandomCocktails = Array.from({ length: 10 }, () =>
       fetch(COCKTAILS_LIST).then(async (res) => {
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
@@ -54,24 +55,24 @@ const fetchRandomCocktails = async () => {
     );
 
     cocktails.value = await Promise.all(fetchRandomCocktails);
-    loading.value = false;
+    isLoading.value = false;
   } catch (error) {
-    loading.value = false;
+    isLoading.value = false;
     console.error("Fetch failed:", error);
   }
 };
 
 onMounted(async () => {
-  loading.value = true;
+  isLoading.value = true;
   cocktails.value = await fetchCocktails();
-  loading.value = false;
+  isLoading.value = false;
 });
 </script>
 
 <template>
   <div>
     <CocktailsHeader
-      :selectedIngredients="selectedIngredients"
+      :isSelectedIngredients="isSelectedIngredients"
       v-on:onHandleSearch="onHandleSearch"
       v-on:onHandleIngredients="onHandleIngredients"
     />
@@ -79,7 +80,7 @@ onMounted(async () => {
     <Layout.Content
       style="padding: 24px; background-color: #001529; min-height: 100vh"
     >
-      <template v-if="!selectedIngredients">
+      <template v-if="!isSelectedIngredients">
         <Row
           justify="center"
           style="padding: 40px 0 10px; margin-bottom: 4rem; text-align: center"
@@ -108,12 +109,12 @@ onMounted(async () => {
         </Row>
       </template>
 
-      <Ingredients v-if="selectedIngredients" />
+      <Ingredients v-if="isSelectedIngredients" />
 
       <Row v-else :gutter="[16, 16]" justify="center" style="gap: 3rem">
-        <Spin v-if="loading" size="large" style="transform: scale(2)" />
+        <Spin v-if="isLoading" size="large" style="transform: scale(2)" />
         <div
-          v-else-if="cocktails.length === 0 && !loading"
+          v-else-if="cocktails.length === 0 && !isLoading"
           style="
             text-align: center;
             margin-top: 50px;
@@ -126,13 +127,13 @@ onMounted(async () => {
         <Col
           v-for="cocktail in cocktails"
           :key="cocktail.idDrink"
-          :xs="24"
+          :xs="22"
           :sm="12"
           :md="8"
-          :lg="6"
+          :lg="5"
         >
           <Card
-            :loading="loading"
+            :isLoading="isLoading"
             :cover="
               h('img', { alt: cocktail.strDrink, src: cocktail.strDrinkThumb })
             "
@@ -172,7 +173,7 @@ onMounted(async () => {
         </Col>
       </Row>
 
-      <template v-if="!selectedIngredients">
+      <template v-if="!isSelectedIngredients">
         <Row
           justify="center"
           style="padding: 40px 0 10px; margin-bottom: 4rem; text-align: center"
@@ -191,7 +192,7 @@ html,
 body {
   margin: 0;
   padding: 0;
-  minheight: 100vh;
+  min-height: 100vh;
   width: 100vw;
   overflow-x: hidden;
 }

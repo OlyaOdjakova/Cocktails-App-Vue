@@ -1,25 +1,37 @@
 <script setup lang="ts">
 import { defineProps } from "vue";
-import Header from "ant-design-vue";
-import Search from "ant-design-vue";
+import { Layout, Input, Button } from "ant-design-vue";
+import { watch } from "vue";
 
 const props = defineProps<{
-  selectedIngredients: boolean;
+  isSelectedIngredients: boolean;
 }>();
 
-const { selectedIngredients } = props;
+defineEmits<{
+  (e: "onHandleSearch", searchValue: string): void;
+  (e: "onHandleIngredients", isSelected: boolean): void;
+}>();
+
+const { isSelectedIngredients } = props;
+
+watch(
+  () => props.isSelectedIngredients,
+  (val) => {
+    console.log("Prop changed:", val);
+  },
+);
 </script>
 
 <template>
-  <Header
+  <Layout.Header
     :style="{
-      background: '',
-      padding: '0 24px',
+      padding: '24px',
       position: 'fixed',
       top: 0,
       left: 0,
       right: 0,
       zIndex: 1000,
+      backgroundColor: '#001529',
     }"
   >
     <div
@@ -35,31 +47,47 @@ const { selectedIngredients } = props;
           fontSize: '20px',
           cursor: 'pointer',
           display: 'flex',
+          gap: '2rem',
         }"
       >
-        <div
-          :style="{ marginLeft: '20px', cursor: 'pointer', gap: '2rem' }"
-          @click="$emit('onHandleSearch', false)"
+        <Button
+          :style="{
+            fontSize: '22px',
+            background: 'transparent',
+            border: 'none',
+            color: 'white',
+            paddingBottom: '1rem',
+            borderBottom: !isSelectedIngredients ? '2px solid #e6007e' : 'none',
+          }"
+          @click="$emit('onHandleIngredients', false)"
         >
           Cocktails
-        </div>
-        <div
-          :style="{ marginLeft: '20px', cursor: 'pointer' }"
+        </Button>
+
+        <Button
+          :style="{
+            fontSize: '22px',
+            background: 'transparent',
+            border: 'none',
+            color: 'white',
+            borderBottom: isSelectedIngredients ? '2px solid #e6007e' : 'none',
+          }"
           @click="$emit('onHandleIngredients', true)"
         >
           Ingredients
-        </div>
+        </Button>
       </div>
 
-      <Search
-        v-if="!selectedIngredients"
-        placeholder="Search by name"
-        allow-clear
-        enter-button="Search"
-        size="large"
-        @search="$emit('onHandleSearch')"
-        :style="{ maxWidth: '400px' }"
-      />
+      <div v-if="!isSelectedIngredients">
+        <Input.Search
+          placeholder="Search by name"
+          allow-clear
+          enter-button="Search"
+          size="large"
+          @search="(value) => $emit('onHandleSearch', value)"
+          :style="{ maxWidth: '400px' }"
+        />
+      </div>
     </div>
-  </Header>
+  </Layout.Header>
 </template>

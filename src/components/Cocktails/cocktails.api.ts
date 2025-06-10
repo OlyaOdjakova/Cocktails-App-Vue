@@ -2,7 +2,7 @@ import { Cocktail } from "./cocktails.types";
 
 export const fetchCocktails = async (): Promise<Cocktail[]> => {
   try {
-    const fetchPromises = Array.from({ length: 3 }, () =>
+    const fetchPromises = Array.from({ length: 10 }, () =>
       fetch("https://www.thecocktaildb.com/api/json/v1/1/random.php").then(
         async (res) => {
           if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);

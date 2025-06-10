@@ -111,7 +111,7 @@ onMounted(async () => {
 
       <Ingredients v-if="isSelectedIngredients" />
 
-      <Row v-else :gutter="[16, 16]" justify="center" style="gap: 3rem">
+      <Row v-else :gutter="[16, 16]" justify="center" style="gap: 2rem">
         <Spin v-if="isLoading" size="large" style="transform: scale(2)" />
         <div
           v-else-if="cocktails.length === 0 && !isLoading"

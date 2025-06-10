@@ -38,19 +38,29 @@ onMounted(() => {
 
 <template>
   <div>
-    <Typography.Title :level="4" style="color: white">Gin</Typography.Title>
+    <Typography.Title
+      :level="2"
+      style="
+        letter-spacing: 5px;
+        margin-top: 7rem;
+        margin-bottom: 8px;
+        color: white;
+      "
+    >
+      GIN
+    </Typography.Title>
     <Row
-      :gutter="[24, 24]"
-      style="margin-top: 10rem; overflow-x: hidden"
+      :gutter="[22, 22]"
+      style="margin-top: 10rem; overflow-x: hidden; gap: 2rem"
       justify="center"
     >
       <Col
-        v-for="ingredient in ingredients.slice(0, 15)"
+        v-for="ingredient in ingredients.slice(0, 10)"
         :key="ingredient.idDrink"
         :xs="12"
         :sm="6"
         :md="4"
-        :lg="3"
+        :lg="5"
       >
         <Card
           :loading="loading"

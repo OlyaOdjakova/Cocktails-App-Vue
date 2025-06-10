@@ -38,17 +38,6 @@ onMounted(() => {
 
 <template>
   <div>
-    <Typography.Title
-      :level="2"
-      style="
-        letter-spacing: 5px;
-        margin-top: 7rem;
-        margin-bottom: 8px;
-        color: white;
-      "
-    >
-      GIN
-    </Typography.Title>
     <Row
       :gutter="[22, 22]"
       style="margin-top: 10rem; overflow-x: hidden; gap: 2rem"

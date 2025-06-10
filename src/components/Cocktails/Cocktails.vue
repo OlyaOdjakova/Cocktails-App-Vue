@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted, h, watch } from "vue";
+import { h, onMounted, ref } from "vue";
 import { Cocktail } from "@/components/Cocktails/cocktails.types";
 import { getIngredientsWithMeasures } from "@/components/Cocktails/cocktails.utils";
 import { fetchCocktails } from "@/components/Cocktails/cocktails.api";
@@ -8,27 +8,20 @@ import CocktailsHeader from "@/components/Cocktails/CocktailsHeader/CocktailsHea
 import Ingredients from "@/components/Cocktails/Ingredients/Ingredients.vue";
 
 import {
-  Row,
-  Col,
-  Card,
-  Typography,
-  Spin,
-  Layout,
-  Divider,
-  List,
   Button,
+  Card,
+  Col,
+  Divider,
+  Layout,
+  List,
+  Row,
+  Spin,
+  Typography,
 } from "ant-design-vue";
 
 const cocktails = ref<Cocktail[]>([]);
 const isLoading = ref(false);
 const isSelectedIngredients = ref(false);
-
-watch(
-  () => isSelectedIngredients,
-  (val) => {
-    console.log("Prop changed:", val);
-  },
-);
 
 const onHandleIngredients = (isSelected: boolean) => {
   isSelectedIngredients.value = isSelected;
@@ -80,34 +73,33 @@ onMounted(async () => {
     <Layout.Content
       style="padding: 24px; background-color: #001529; min-height: 100vh"
     >
-      <template v-if="!isSelectedIngredients">
-        <Row
-          justify="center"
-          style="padding: 40px 0 10px; margin-bottom: 4rem; text-align: center"
-        >
-          <div>
-            <Typography.Title
-              :level="2"
-              style="
-                letter-spacing: 5px;
-                margin-top: 5rem;
-                margin-bottom: 8px;
-                color: white;
-              "
-            >
-              LIST OF COCKTAILS
-            </Typography.Title>
-            <Divider
-              style="
-                background-color: #e6007e;
-                height: 4px;
-                margin: 0 auto;
-                width: 20px;
-              "
-            />
-          </div>
-        </Row>
-      </template>
+      <Row
+        justify="center"
+        style="padding: 40px 0 10px; margin-bottom: 4rem; text-align: center"
+      >
+        <div>
+          <Typography.Title
+            :level="2"
+            style="
+              letter-spacing: 5px;
+              margin-top: 5rem;
+              margin-bottom: 8px;
+              color: white;
+            "
+          >
+            <span v-if="!isSelectedIngredients">LIST OF COCKTAILS</span>
+            <span v-if="isSelectedIngredients">LIST OF INGREDIENTS</span>
+          </Typography.Title>
+          <Divider
+            style="
+              background-color: #e6007e;
+              height: 4px;
+              margin: 0 auto;
+              width: 20px;
+            "
+          />
+        </div>
+      </Row>
 
       <Ingredients v-if="isSelectedIngredients" />
 

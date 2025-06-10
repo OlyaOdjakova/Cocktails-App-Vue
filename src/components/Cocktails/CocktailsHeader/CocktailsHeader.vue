@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
+import { computed, defineProps } from "vue";
 import { Layout, Input, Button } from "ant-design-vue";
-import { watch } from "vue";
 
 const props = defineProps<{
   isSelectedIngredients: boolean;
@@ -10,16 +9,10 @@ const props = defineProps<{
 defineEmits<{
   (e: "onHandleSearch", searchValue: string): void;
   (e: "onHandleIngredients", isSelected: boolean): void;
+  (e: "onHandleIngredientsSearch", searchValue: string): void;
 }>();
 
-const { isSelectedIngredients } = props;
-
-watch(
-  () => props.isSelectedIngredients,
-  (val) => {
-    console.log("Prop changed:", val);
-  },
-);
+const isSelectedIngredients = computed(() => props.isSelectedIngredients);
 </script>
 
 <template>
@@ -82,9 +75,21 @@ watch(
         <Input.Search
           placeholder="Search by name"
           allow-clear
-          enter-button="Search"
           size="large"
           @search="(value) => $emit('onHandleSearch', value)"
+          :style="{ maxWidth: '400px' }"
+        />
+      </div>
+
+      <div
+        v-if="isSelectedIngredients"
+        style="display: flex; justify-content: center; align-items: center"
+      >
+        <Input.Search
+          placeholder="Search by ingredient"
+          allow-clear
+          size="large"
+          @search="(value) => $emit('onHandleIngredientsSearch', value)"
           :style="{ maxWidth: '400px' }"
         />
       </div>

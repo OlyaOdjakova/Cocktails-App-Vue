@@ -29,11 +29,9 @@ const onHandleIngredients = (isSelected: boolean) => {
 
 const onHandleSearch = async (searchValue: string) => {
   const searchTerm = searchValue.trim().toLowerCase();
-
-  const filtered = cocktails.value.filter((cocktail) =>
+  cocktails.value = cocktails.value.filter((cocktail) =>
     cocktail.strDrink.toLowerCase().includes(searchTerm),
   );
-  cocktails.value = filtered;
 };
 
 const fetchRandomCocktails = async () => {

@@ -58,6 +58,7 @@ const isSelectedIngredients = computed(() => props.isSelectedIngredients);
         </Button>
 
         <Button
+          id="ingredients-button"
           :style="{
             fontSize: '22px',
             background: 'transparent',
@@ -77,19 +78,6 @@ const isSelectedIngredients = computed(() => props.isSelectedIngredients);
           allow-clear
           size="large"
           @search="(value) => $emit('onHandleSearch', value)"
-          :style="{ maxWidth: '400px' }"
-        />
-      </div>
-
-      <div
-        v-if="isSelectedIngredients"
-        style="display: flex; justify-content: center; align-items: center"
-      >
-        <Input.Search
-          placeholder="Search by ingredient"
-          allow-clear
-          size="large"
-          @search="(value) => $emit('onHandleIngredientsSearch', value)"
           :style="{ maxWidth: '400px' }"
         />
       </div>

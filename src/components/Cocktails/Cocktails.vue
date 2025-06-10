@@ -45,7 +45,7 @@ const onHandleSearch = async (searchValue: string) => {
 const fetchRandomCocktails = async () => {
   try {
     loading.value = true;
-    const fetchPromises = Array.from({ length: 3 }, () =>
+    const fetchRandomCocktails = Array.from({ length: 3 }, () =>
       fetch(COCKTAILS_LIST).then(async (res) => {
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
@@ -53,25 +53,27 @@ const fetchRandomCocktails = async () => {
       }),
     );
 
-    cocktails.value = await Promise.all(fetchPromises);
-  } catch (error: any) {
-    console.error("Fetch failed:", error.message);
-  } finally {
+    cocktails.value = await Promise.all(fetchRandomCocktails);
     loading.value = false;
+  } catch (error) {
+    loading.value = false;
+    console.error("Fetch failed:", error);
   }
 };
 
 onMounted(async () => {
+  loading.value = true;
   cocktails.value = await fetchCocktails();
+  loading.value = false;
 });
 </script>
 
 <template>
-  <div style="height: 100%">
+  <div>
     <CocktailsHeader
       :selectedIngredients="selectedIngredients"
-      @onHandleSearch="onHandleSearch"
-      @onHandleIngredients="onHandleIngredients"
+      v-on:onHandleSearch="onHandleSearch"
+      v-on:onHandleIngredients="onHandleIngredients"
     />
 
     <Layout.Content
@@ -108,14 +110,10 @@ onMounted(async () => {
 
       <Ingredients v-if="selectedIngredients" />
 
-      <Row v-else gutter="[16, 16]" justify="center" style="gap: 3rem">
-        <Spin
-          v-if="loading"
-          size="large"
-          style="transform: scale(2); margin: 50px 0"
-        />
+      <Row v-else :gutter="[16, 16]" justify="center" style="gap: 3rem">
+        <Spin v-if="loading" size="large" style="transform: scale(2)" />
         <div
-          v-else-if="cocktails.length === 0"
+          v-else-if="cocktails.length === 0 && !loading"
           style="
             text-align: center;
             margin-top: 50px;
@@ -146,11 +144,22 @@ onMounted(async () => {
             <Typography.Title :level="4" style="margin-bottom: 12px">{{
               cocktail.strDrink
             }}</Typography.Title>
+
+            <Typography.Paragraph style="font-size: 0.9rem; display: inline">
+              <strong>Measures:</strong>
+            </Typography.Paragraph>
             <List
               size="small"
               :data-source="getIngredientsWithMeasures(cocktail)"
-              header="<strong>Measures:</strong>"
-              :renderItem="(item: string) => h('a-list-item', item)"
+              :renderItem="
+                ({ item, index }) =>
+                  h('a-list-item', { key: index }, [
+                    item,
+                    index < getIngredientsWithMeasures(cocktail).length - 1
+                      ? h('span', ', ')
+                      : null,
+                  ])
+              "
               style="margin-bottom: 12px"
             />
             <Typography.Paragraph style="font-size: 0.9rem">
@@ -176,3 +185,14 @@ onMounted(async () => {
     </Layout.Content>
   </div>
 </template>
+
+<style>
+html,
+body {
+  margin: 0;
+  padding: 0;
+  minheight: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+}
+</style>

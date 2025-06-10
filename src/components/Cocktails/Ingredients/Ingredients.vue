@@ -1,6 +1,6 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { Row, Col, Card, Typography } from "ant-design-vue";
+import { onMounted, ref } from "vue";
+import { Card, Col, Row, Typography } from "ant-design-vue";
 
 const ingredients = ref([]);
 const loading = ref(false);
@@ -24,8 +24,7 @@ const fetchRandomIngredients = async () => {
 
 const getIngredients = async () => {
   try {
-    const data = await fetchRandomIngredients();
-    ingredients.value = data;
+    ingredients.value = await fetchRandomIngredients();
   } catch (error) {
     console.error("Failed to fetch ingredients:", error);
     ingredients.value = [];
@@ -36,8 +35,6 @@ onMounted(() => {
   getIngredients();
 });
 </script>
-
-<style scoped></style>
 
 <template>
   <div>

@@ -5,11 +5,9 @@ import Search from "ant-design-vue";
 
 const props = defineProps<{
   selectedIngredients: boolean;
-  onHandleSearch: (value: string) => void;
-  onHandleIngredients: (showIngredients: boolean) => void;
 }>();
 
-const { selectedIngredients, onHandleSearch, onHandleIngredients } = props;
+const { selectedIngredients } = props;
 </script>
 
 <template>
@@ -41,13 +39,13 @@ const { selectedIngredients, onHandleSearch, onHandleIngredients } = props;
       >
         <div
           :style="{ marginLeft: '20px', cursor: 'pointer', gap: '2rem' }"
-          @click="() => onHandleIngredients(false)"
+          @click="$emit('onHandleSearch', false)"
         >
           Cocktails
         </div>
         <div
           :style="{ marginLeft: '20px', cursor: 'pointer' }"
-          @click="() => onHandleIngredients(true)"
+          @click="$emit('onHandleIngredients', true)"
         >
           Ingredients
         </div>
@@ -59,7 +57,7 @@ const { selectedIngredients, onHandleSearch, onHandleIngredients } = props;
         allow-clear
         enter-button="Search"
         size="large"
-        @search="onHandleSearch"
+        @search="$emit('onHandleSearch')"
         :style="{ maxWidth: '400px' }"
       />
     </div>

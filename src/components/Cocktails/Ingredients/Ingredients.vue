@@ -44,9 +44,9 @@ onMounted(() => {
       <Col
         v-for="ingredient in ingredients.slice(0, 7)"
         :key="ingredient.idDrink"
-        :xs="12"
-        :sm="6"
-        :md="4"
+        :xs="22"
+        :sm="12"
+        :md="8"
         :lg="5"
       >
         <Card

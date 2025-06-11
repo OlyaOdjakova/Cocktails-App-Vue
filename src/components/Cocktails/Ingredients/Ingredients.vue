@@ -1,23 +1,21 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { Card, Col, Row, Typography } from "ant-design-vue";
+import { INGREDIENTS } from "@/components/Cocktails/cocktails.constants.js";
 
 const ingredients = ref([]);
-const loading = ref(false);
+const isLoading = ref(false);
 
 const fetchRandomIngredients = async () => {
   try {
-    loading.value = true;
-    const res = await fetch(
-      "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=Gin",
-    );
-    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-    const data = await res.json();
-    loading.value = false;
+    isLoading.value = true;
+    const response = await fetch(INGREDIENTS);
+    const data = await response.json();
+    isLoading.value = false;
     return data?.drinks || [];
   } catch (error) {
     console.error("Fetch failed:", error);
-    loading.value = false;
+    isLoading.value = false;
     return [];
   }
 };
@@ -40,11 +38,11 @@ onMounted(() => {
   <div>
     <Row
       :gutter="[22, 22]"
-      style="margin-top: 10rem; overflow-x: hidden; gap: 2rem"
+      style="overflow-x: hidden; gap: 2rem"
       justify="center"
     >
       <Col
-        v-for="ingredient in ingredients.slice(0, 10)"
+        v-for="ingredient in ingredients.slice(0, 7)"
         :key="ingredient.idDrink"
         :xs="12"
         :sm="6"
@@ -52,7 +50,7 @@ onMounted(() => {
         :lg="5"
       >
         <Card
-          :loading="loading"
+          :loading="isLoading"
           style="
             box-shadow: 0 4px 16px rgba(211, 211, 211, 0.6);
             background-color: #f8f8f8;

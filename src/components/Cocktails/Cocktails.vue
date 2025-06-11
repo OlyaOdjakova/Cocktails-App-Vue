@@ -6,7 +6,6 @@ import { fetchCocktails } from "@/components/Cocktails/cocktails.api";
 import { COCKTAILS_LIST } from "@/components/Cocktails/cocktails.constants";
 import CocktailsHeader from "@/components/Cocktails/CocktailsHeader/CocktailsHeader.vue";
 import Ingredients from "@/components/Cocktails/Ingredients/Ingredients.vue";
-
 import {
   Button,
   Card,
@@ -39,7 +38,7 @@ const fetchRandomCocktails = async () => {
     isLoading.value = true;
     const fetchRandomCocktails = Array.from({ length: 10 }, () =>
       fetch(COCKTAILS_LIST).then(async (res) => {
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        if (!res.ok) throw new Error(`HTTP error, status: ${res.status}`);
         const data = await res.json();
         return data.drinks?.[0] as Cocktail;
       }),
@@ -85,8 +84,8 @@ onMounted(async () => {
               color: white;
             "
           >
-            <span v-if="!isSelectedIngredients">LIST OF COCKTAILS</span>
-            <span v-if="isSelectedIngredients">LIST OF INGREDIENTS</span>
+            <span v-if="!isSelectedIngredients">COCKTAIL RECIPES</span>
+            <span v-if="isSelectedIngredients">COCKTAIL INGREDIENTS</span>
           </Typography.Title>
           <Divider
             style="
@@ -130,6 +129,7 @@ onMounted(async () => {
             style="
               box-shadow: 0 4px 16px rgba(211, 211, 211, 0.6);
               background-color: #f8f8f8;
+              maxheight: 40rem;
             "
           >
             <Typography.Title :level="4" style="margin-bottom: 12px">{{

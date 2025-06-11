@@ -1,29 +1,12 @@
-# cocktails-app
+# Cocktail App
 
-This template should help get you started developing with Vue 3 in Vite.
+A web application that displays a list of randomly fetched cocktails using data from [TheCocktailDB API](https://www.thecocktaildb.com/api.php).
 
-## Recommended IDE Setup
+**Tech Stack:**  
+- TypeScript  
+- Vue.js  
+- Ant Design Vue  
+- Playwright (for end-to-end testing)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+**Live Demo:**  
+Deployed on Vercel: [cocktails-app-vue.vercel.app](https://cocktails-app-vue.vercel.app)

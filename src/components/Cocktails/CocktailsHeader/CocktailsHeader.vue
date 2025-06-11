@@ -18,7 +18,7 @@ const isSelectedIngredients = computed(() => props.isSelectedIngredients);
 <template>
   <Layout.Header
     :style="{
-      padding: '24px',
+      padding: '20px',
       position: 'fixed',
       top: 0,
       left: 0,
@@ -78,7 +78,6 @@ const isSelectedIngredients = computed(() => props.isSelectedIngredients);
           allow-clear
           size="large"
           @search="(value) => $emit('onHandleSearch', value)"
-          :style="{ maxWidth: '400px' }"
         />
       </div>
     </div>
